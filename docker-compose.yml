@@ -1,0 +1,42 @@
+version: "2"
+services:
+  testphp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./public:/var/www/html/public
+    env_file:
+      - env_test
+  
+  nginx4test:
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    restart: always
+    ports: ["3023:80"]
+
+  mongo:
+    image: mongo:3.6.5
+    restart: always
+    ports:
+      - 127.0.0.1:27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: ziNaTeiz7Z
+      MONGO_INITDB_DATABASE: checku
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: ziNaTeiz7Z
+    ports: [
+      "5672:5672",
+      "15672:15672"
+      ]
+
+  redis:
+    image: redis:4-alpine
+    ports: ["6379:6379"]
